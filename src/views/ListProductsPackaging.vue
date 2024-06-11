@@ -206,7 +206,6 @@ async function apiSaveListMaterial(dataSave: SaveListMaterial[]) {
     response.forEach((item) => {
       console.log(" -> ", JSON.parse(JSON.stringify(item)));
     });
-    5555;
     console.log("---------------------------------");
   } catch (error) {
     console.error("Error saving data:", error);
