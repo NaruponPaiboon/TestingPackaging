@@ -1,16 +1,24 @@
 <template>
   <div class="main-containers">
-    <div class="search-containers">
-      <div>
-        <span>Material: </span>
-        <input type="text" v-model="textSearch" />
+    <div class="header-containers">
+      <div class="search-containers">
+        <div>
+          <span>{{ "Material : " }} </span>
+        </div>
+        <div><input type="text" v-model="textSearch" /></div>
+        <div>
+          <button @click="onSearch()">
+            {{ "Search 🔍" }}
+          </button>
+        </div>
       </div>
-      <button @click="onSearch()">Search 🔍</button>
+
+      <div class="button-add-material">
+        <button @click="onAdd()">{{ "➕" }}</button>
+      </div>
     </div>
-    <div style="display: flex; justify-content: end">
-      <button @click="onAdd()">➕</button>
-    </div>
-    <div>
+
+    <div class="table-material">
       <base-table
         :column="columnTable"
         :data="dataTable"
@@ -22,6 +30,7 @@
           v-slot:[`cell(${col.key})`]="slotProps"
         >
           <input
+            class="input-location"
             type="number"
             v-model="slotProps.item[col.key]"
             @input="validate(slotProps.item, col.key)"
@@ -36,8 +45,11 @@
         </template>
       </base-table>
     </div>
-    <div style="display: flex; justify-content: end">
-      <button @click="onSave()">{{ "Save" }}</button>
+    <div class="button-save">
+      <button v-if="isLoadingSave" style="pointer-events: none;">
+        {{ "Loading..." }}
+      </button>
+      <button @click="onSave()" v-else>{{ "Save" }}</button>
     </div>
   </div>
 
@@ -75,6 +87,7 @@ const dataTable = ref<DataTable[]>([]);
 const originalDataTable = ref<DataTable[]>([]);
 const textSearch = ref<string>("");
 const isLoading = ref<boolean>(false);
+  const isLoadingSave = ref<boolean>(false);
 const isOpenModal = ref<boolean>(false);
 
 const locationList = ref<string[]>([]);
@@ -198,6 +211,7 @@ async function apiGetLitsTable() {
 }
 
 async function apiSaveListMaterial(dataSave: SaveListMaterial[]) {
+  isLoadingSave.value = true;
   try {
     const response = await saveListMaterial(dataSave);
     alert("Save successful! Data in console.");
@@ -209,6 +223,8 @@ async function apiSaveListMaterial(dataSave: SaveListMaterial[]) {
     console.log("---------------------------------");
   } catch (error) {
     console.error("Error saving data:", error);
+  } finally {
+    isLoadingSave.value = false;
   }
 }
 

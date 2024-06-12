@@ -33,8 +33,7 @@ const handleClose = () => {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.507); // Gray background with transparency
-
+  background-color: rgba(0, 0, 0, 0.507); 
   .modal-inner {
     position: relative;
     display: flex;
@@ -51,7 +50,7 @@ const handleClose = () => {
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     position: relative;
-    z-index: 1; // Ensure the modal is above the background
+    z-index: 1;
   }
 }
 </style>

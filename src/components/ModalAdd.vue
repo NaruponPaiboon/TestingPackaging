@@ -3,22 +3,24 @@
     <template v-slot:body="">
       <div class="modal-body-container">
         <div class="body-left">
-          <div>{{ "Material:" }}</div>
-          <div>{{ "ProductCode:" }}</div>
-          <div>{{ "Description:" }}</div>
+          <div>{{ "Material : " }}</div>
+          <div>{{ "Product Code : " }}</div>
+          <div>{{ "Description : " }}</div>
         </div>
         <div class="body-right">
           <div class="input-material">
             <input type="text" name="" id="" v-model="inputMaterial" />
-            <button @click="apiGet">🔍</button>
+            <button @click="apiGet" :disabled="inputMaterial == ''">🔍</button>
           </div>
           <div>{{ productCodeData }}</div>
           <div>{{ descriptionData }}</div>
         </div>
       </div>
-      <div>
-        <button @click="onAddMaterial" :disabled="isDisable">ADD</button>
-        <button @click="onCloseModal()">Chancel</button>
+      <div class="modal-footer-container">
+        <button @click="onAddMaterial" :disabled="isDisable">
+          {{ "Add" }}
+        </button>
+        <button @click="onCloseModal()">{{ "Chancel" }}</button>
       </div>
     </template>
   </base-modal>
@@ -68,23 +70,25 @@ function checkData(): boolean {
 }
 
 async function apiGet() {
-  productCodeData.value = "Loading...";
-  descriptionData.value = "Loading...";
+  const textLoading = "Loading...";
+  productCodeData.value = textLoading;
+  descriptionData.value = textLoading;
 
   try {
     await fetchMaterial({ Material: inputMaterial.value }).then(
       (response: GetMaterial[]) => {
+        const text = "No Material";
         if (response.length === 0) {
-          productCodeData.value = "No Material";
-          descriptionData.value = "No Material";
+          productCodeData.value = text;
+          descriptionData.value = text;
           isDisable.value = true;
         } else {
           const productCode = response[0].ProductCode
             ? response[0].ProductCode
-            : "No Material";
+            : text;
           const description = response[0].Description
             ? response[0].Description
-            : "No Material";
+            : text;
           productCodeData.value = productCode;
           descriptionData.value = description;
           isDisable.value = checkData();
@@ -98,21 +102,38 @@ async function apiGet() {
 </script>
 
 <style scoped lang="scss">
-.background-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
+.modal-body-container {
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.507);
+  padding: 2rem;
+  display: flex;
+  justify-content: center;
+  .body-left {
+    min-width: 200px;
+    div {
+      height: 30px;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+    }
+  }
+  .body-right {
+    min-width: 200px;
+    div {
+      height: 30px;
+      display: flex;
+      justify-content: start;
+      align-items: center;
+    }
+  }
+}
+.modal-footer-container{
   display: flex;
   justify-content: center;
   align-items: center;
-  .modal-container {
-    min-width: 400px;
-    min-height: 250px;
-    background-color: white;
-    border-radius: 20px;
+  button{
+    margin: 0 0.2rem;
+    padding: 0.2rem .5rem;
+    min-width: 70px;
   }
 }
 </style>

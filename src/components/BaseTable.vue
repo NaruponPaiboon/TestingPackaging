@@ -94,4 +94,8 @@ onMounted(() => {
 .custom-table th {
   background-color: #f2f2f2;
 }
+th,
+tr {
+  min-width: 130px;
+}
 </style>
